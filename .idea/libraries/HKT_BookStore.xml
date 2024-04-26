@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="HKT_BookStore">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/HKT_BookStore.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
