@@ -77,7 +77,7 @@ public class Run {
                     break;
                 case 3: //Update book
                     int statusYesNo1;
-                    
+
                     if(list.checkListEmpty()){
                         
                     } else {
@@ -85,7 +85,7 @@ public class Run {
                         
                         System.out.print("Enter ID of book that you want to update: ");
                         IDWantUpdate = list.addId();
-                        
+
                         list.updateBookByID(IDWantUpdate);
                         
                         System.out.println("Continue updating another book ?");
@@ -145,7 +145,7 @@ public class Run {
                             try {
                                 sc = new Scanner(System.in);
                                 text = sc.nextLine();
-                                if (text.equals(""))
+                                if (text.isEmpty())
                                     throw new Exception();
                                 stillAdd = false;
                             } catch (Exception e) {
@@ -165,7 +165,7 @@ public class Run {
                                 try {
                                     sc = new Scanner(System.in);
                                     text = sc.nextLine();
-                                    if (text.equals(""))
+                                    if (text.isEmpty())
                                         throw new Exception();
                                     stillAdd = false;
                                 } catch (Exception e) {

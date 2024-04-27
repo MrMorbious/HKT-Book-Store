@@ -74,42 +74,44 @@ public class Book implements Serializable{
         Scanner sc = new Scanner(System.in);
         boolean stillAdd = true;
         
-        System.out.print("Add book's ISBN: ");
+        System.out.print("Enter book's ISBN: ");
         do {            
             try {
                 sc = new Scanner(System.in);
                 ISBN = sc.nextLine();
-                if (ISBN.equals("") || ListOfBook.findBookByISBN(ISBN) != null)
+                if (ISBN.isEmpty() || ListOfBook.findBookByISBN(ISBN) != null)
                     throw new Exception();
                 stillAdd = false;
             } catch (Exception e) {
-                System.out.print("Add another ISBN: ");
+                System.out.print("Enter another ISBN: ");
                 stillAdd = true;
             }
         } while (stillAdd);
         
-        System.out.print("Add book's ID: ");
+        System.out.print("Enter book's ID: ");
         do {            
             try {
                 sc = new Scanner(System.in);
                 bookID = sc.nextLine();
-                if (bookID.equals("") || ListOfBook.findBookByID(bookID) != null)
-                    throw new Exception();
+                if (ListOfBook.findBookByID(bookID) != null)
+                    throw new Exception("Book's ID already exist!");
+                if(bookID.isEmpty())
+                    throw new Exception("Book's ID not accept empty!");
                 stillAdd = false;
             } catch (Exception e) {
-                System.out.println("Book's ID exist! Please enter another Book's ID !");
-                System.out.print("Add another book's ID: ");
+                System.out.println(e.getMessage());
+                System.out.print("Enter another book's ID: ");
                 stillAdd = true;
             }
         } while (stillAdd);
         
-        System.out.print("Add title: ");
+        System.out.print("Enter title: ");
         sc = new Scanner(System.in);
                 title = sc.nextLine();
-                if (title.equals(""))
+                if (title.isEmpty())
                     getTitle();
         
-        System.out.print("Add price: ");
+        System.out.print("Enter price: ");
         do {
             try {
                 sc = new Scanner(System.in);
@@ -118,7 +120,7 @@ public class Book implements Serializable{
                     throw new Exception();
                 stillAdd = false;
             } catch (Exception e) {
-                System.out.print("Add another price: ");
+                System.out.print("Enter another price: ");
                 stillAdd = true;
             }
         } while (stillAdd);
@@ -126,6 +128,7 @@ public class Book implements Serializable{
         author.addAuthorInformation();
         author_external.listAuthor.add(author);
     }
+
     
     public void printBookInformation() {
         System.out.println("----------------");

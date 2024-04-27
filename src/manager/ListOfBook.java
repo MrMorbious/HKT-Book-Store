@@ -30,6 +30,13 @@ public class ListOfBook {
         }
         return null;
     }
+    public static boolean checkISBNOfBookExist(String ISBN) {
+        for (Book bookInformation : listBook) {
+            if (bookInformation.getISBN().equals(ISBN))
+                return true;
+        }
+        return false;
+    }
     
     public static Book findBookByID(String bookID) {
         for (Book bookInformation : listBook) {
@@ -38,78 +45,109 @@ public class ListOfBook {
         }
         return null;
     }
+    public static boolean checkIdOfBookExist(String bookID) {
+        for (Book bookInformation : listBook) {
+            if (bookInformation.getBookID().equals(bookID))
+                return true;
+        }
+        return false;
+    }
     
     public void updateBookByID(String bookID) {
         Scanner sc = new Scanner(System.in);
         boolean stillAdd = true;
         Author author = new Author();
-        
-        if (findBookByID(bookID) == null)  
+        System.out.println("\n-----> Leave blank to keep current <-----");
+        if (findBookByID(bookID) == null)
             System.out.println("Book does not exist!\n");
         else {
             Book bookWillUpdate = findBookByID(bookID);
-            
             System.out.print("Update ISBN: ");
             do {
                 try {
                     sc = new Scanner(System.in);
-                    bookWillUpdate.setISBN(sc.nextLine());
-                    if (bookWillUpdate.getISBN().equals("") && findBookByISBN(bookWillUpdate.getISBN()) != null)
-                        throw new Exception();
+                    String newISBN = sc.nextLine();
+                    if (!newISBN.isEmpty()) {
+                        if (!newISBN.equals(bookWillUpdate.getISBN()) && checkISBNOfBookExist(newISBN)) {
+                            throw new Exception("Book's ISBN already exists!");
+                        }
+                        bookWillUpdate.setISBN(newISBN);
+                    }
                     stillAdd = false;
                 } catch (Exception e) {
+                    System.out.println(e.getMessage());
                     System.out.print("Enter another book's ISBN: ");
-                    stillAdd = true;
                 }
             } while (stillAdd);
-            
+
             System.out.print("Update ID: ");
             do {
                 try {
                     sc = new Scanner(System.in);
-                    bookWillUpdate.setBookID(sc.nextLine());
-                    if (bookWillUpdate.getBookID().equals("") && findBookByID(bookWillUpdate.getBookID()) != null)
-                        throw new Exception();
+                    String newID = sc.nextLine();
+                    if (!newID.isEmpty()) {
+                        if (!newID.equals(bookWillUpdate.getBookID()) && checkIdOfBookExist(newID)) {
+                            throw new Exception("Book's ID already exists!");
+                        }
+                        bookWillUpdate.setBookID(newID);
+                    }
                     stillAdd = false;
                 } catch (Exception e) {
+                    System.out.println(e.getMessage());
                     System.out.print("Enter another book's ID: ");
                     stillAdd = true;
                 }
             } while (stillAdd);
-            
+
             System.out.print("Update title: ");
             do {
                 try {
                     sc = new Scanner(System.in);
-                    bookWillUpdate.setTitle(sc.nextLine());
-                    if (bookWillUpdate.getTitle().equals(""))
-                        throw new Exception();
+                    String newTitle = sc.nextLine();
+                    if (!newTitle.isEmpty()) {
+                        bookWillUpdate.setTitle(newTitle);
+                    }
                     stillAdd = false;
                 } catch (Exception e) {
                     System.out.print("Enter another title: ");
                     stillAdd = true;
                 }
             } while (stillAdd);
-            
+
             System.out.print("Update price: ");
             do {
                 try {
                     sc = new Scanner(System.in);
-                    bookWillUpdate.setPrice(sc.nextInt());
-                    if (bookWillUpdate.getPrice() <= 0)
-                        throw new Exception();
+                    String newPriceInput = sc.nextLine();
+                    if (!newPriceInput.isEmpty()){
+                        try {
+                            int newPrice = Integer.parseInt(newPriceInput);
+                            if (newPrice <= 0) {
+                                throw new Exception("Price must be a positive integer!");
+                            }
+                            bookWillUpdate.setPrice(newPrice);
+                        } catch (NumberFormatException e) {
+                            throw new Exception("Invalid price format!");
+                        }
+                    }
                     stillAdd = false;
                 } catch (Exception e) {
                     System.out.print("Enter another price: ");
                     stillAdd = true;
                 }
             } while (stillAdd);
-            
-            System.out.println("Update author: ");
-            author.addAuthorInformation();
-            bookWillUpdate.setAuthor(author);
+
+            System.out.print("Update name author: ");
+            String authorInput = sc.nextLine();
+            if (!authorInput.isEmpty()) {
+                Author newAuthor = new Author();
+                newAuthor.addAuthorInformation();
+                bookWillUpdate.setAuthor(newAuthor);
+            } else {
+                bookWillUpdate.setAuthor(bookWillUpdate.getAuthor());
+            }
             System.out.println("");
-            System.out.println("Book's informations after updated are: ");
+            System.out.println("Book's information after updated are: ");
             bookWillUpdate.printBookInformation();
             System.out.println("Updated success!");
         }
@@ -150,15 +188,6 @@ public class ListOfBook {
         }
     }
     
-    public Book findBookByPrice(int price) {
-        if (checkListEmpty()) return null;
-        for (Book bookInformation : listBook) {
-            if (bookInformation.getPrice() <= price)
-                return bookInformation;
-        }
-        return null;
-    }
-    
     public boolean checkListEmpty() {
         if (listBook.isEmpty()) {
             System.out.println("No element!");
@@ -181,7 +210,7 @@ public class ListOfBook {
             }
             fo.close();
             fi.close();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
     
@@ -201,21 +230,6 @@ public class ListOfBook {
         System.out.println("Store data to file success!");
     }
     
-    public void storeAuthorInformationToFile() {
-        String fileNameOfAuthor = "author.dat";
-        try {
-            FileOutputStream f = new FileOutputStream(fileNameOfAuthor);
-            ObjectOutputStream fo = new ObjectOutputStream(f);
-            for (Book bookInformation : listBook) 
-                fo.writeObject(bookInformation.getAuthor());
-            fo.close(); 
-            f.close();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        System.out.println("Store author information to file success!");
-    }
-    
     public int addStatusYesNo() {
         int statusYesNo = 0;
         boolean stillAdd = true;
@@ -233,7 +247,6 @@ public class ListOfBook {
                 stillAdd = false;
             } catch (Exception e) {
                 System.out.print("Just choose 1 or 2: ");
-                stillAdd = true;
             }
         } while (stillAdd);
         return statusYesNo;
@@ -247,12 +260,11 @@ public class ListOfBook {
             try {
                 sc = new Scanner(System.in);
                 id = sc.nextLine();
-                if (id.equals(""))
+                if (id.isEmpty())
                     throw new Exception();
                 stillAdd = false;
             } catch (Exception e) {
                 System.out.print("Enter another ID: ");
-                stillAdd = true;
             }
         } while (stillAdd);
         return id;
