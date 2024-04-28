@@ -2,14 +2,12 @@
 package manager;
 
 import data.Author;
-import data.Book;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import static manager.ListOfBook.listBook;
 
 public class ListOfAuthor {
     public static ArrayList<Author> listAuthor = new ArrayList<>();
@@ -27,13 +25,7 @@ public class ListOfAuthor {
             }
             fo.close(); 
             fi.close();
-        } catch (Exception e) {
-        }
-    }
-    
-    public void printAllAuthor() {
-        for (Author author : listAuthor) {
-            author.printAuthorInformation();
+        } catch (Exception ignored) {
         }
     }
     
@@ -51,15 +43,6 @@ public class ListOfAuthor {
                 return authorInformation;
         }
         return null;
-    }
-    
-    public static boolean findAuthorByName(String authorID, String authorName) {
-        for (Author author : listAuthor) {
-            if (author.getAuthorID().equals(authorID))
-                if (author.getName().equals(authorName))
-                    return true;
-        }
-        return false;
     }
     public void storeDataToFile() {
         String fileNameOfAuthor = "author.dat";

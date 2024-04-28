@@ -84,7 +84,6 @@ public class Book implements Serializable{
                 stillAdd = false;
             } catch (Exception e) {
                 System.out.print("Enter another ISBN: ");
-                stillAdd = true;
             }
         } while (stillAdd);
         
@@ -108,8 +107,9 @@ public class Book implements Serializable{
         System.out.print("Enter title: ");
         sc = new Scanner(System.in);
                 title = sc.nextLine();
-                if (title.isEmpty())
-                    getTitle();
+                if (title.isEmpty()) {
+                    title = getTitle();
+                }
         
         System.out.print("Enter price: ");
         do {

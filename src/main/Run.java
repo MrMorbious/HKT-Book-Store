@@ -2,7 +2,6 @@
 package main;
 
 import data.Book;
-import java.sql.ResultSet;
 import java.util.Scanner;
 import manager.ListOfAuthor;
 import manager.ListOfBook;
@@ -40,17 +39,19 @@ public class Run {
                     sc = new Scanner(System.in);
                     choice = sc.nextInt();
                     if(choice <= 0 || choice > 7)
-                        throw new Exception();
+                        throw new Exception("Please enter your function from 1 to 7 !");
                     stillAdd = false;
                 } catch (Exception e) {
+                    System.out.println(e.getMessage());
                     System.out.print("Enter another choice: ");
                     stillAdd = true;
                 }
             } while (stillAdd);
             
             switch(choice) {
-                case 1: // Show data from file to screen
+                case 1: // Print list book
                     if (list.checkListEmpty()) {
+                        System.out.println("No element!");
                     } else list.printListOfBook();
                     break;
                 case 2: //Add new book
@@ -79,7 +80,7 @@ public class Run {
                     int statusYesNo1;
 
                     if(list.checkListEmpty()){
-                        
+                        System.out.println("No element!");
                     } else {
                         String IDWantUpdate = "";
                         
@@ -106,6 +107,7 @@ public class Run {
                     int statusYesNo2;
                     
                     if (list.checkListEmpty()) {
+                        System.out.println("No element!");
                     } else {
                         String IDWantDelete = "";
                         System.out.print("Enter ID of book that you want to delete: ");
@@ -118,6 +120,7 @@ public class Run {
                             statusYesNo2 =  list.addStatusYesNo();
 
                             if (list.checkListEmpty()) {
+                                System.out.println("No element!");
                             } else {
                                 while (statusYesNo2 == 1) {                            
                                     System.out.print("Enter ID of book that you want to delete: ");
@@ -136,10 +139,10 @@ public class Run {
                     break;
                 case 5: //Search book
                     if (list.checkListEmpty()) {
+                        System.out.println("No element!");
                     } else {
                         String text = "";
                         int statusYesNo3;
-
                         System.out.print("Enter text you want to search from the name of the book that contains: ");
                         do {
                             try {
@@ -184,6 +187,7 @@ public class Run {
                     
                 case 6: //Store data to file
                     if (list.checkListEmpty()) {
+                        System.out.println("No element!");
                     } else {
                         list.storeDataToFile();
                         list1.storeDataToFile();
@@ -196,7 +200,7 @@ public class Run {
                     
             }
             
-        } while (choice > 0 && choice < 7);
+        } while (choice >= 1 && choice < 7);
     }
     
 }

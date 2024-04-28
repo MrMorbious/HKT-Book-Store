@@ -56,7 +56,6 @@ public class ListOfBook {
     public void updateBookByID(String bookID) {
         Scanner sc = new Scanner(System.in);
         boolean stillAdd = true;
-        Author author = new Author();
         System.out.println("\n-----> Leave blank to keep current <-----");
         if (findBookByID(bookID) == null)
             System.out.println("Book does not exist!\n");
@@ -68,6 +67,7 @@ public class ListOfBook {
                     sc = new Scanner(System.in);
                     String newISBN = sc.nextLine();
                     if (!newISBN.isEmpty()) {
+                        assert bookWillUpdate != null;
                         if (!newISBN.equals(bookWillUpdate.getISBN()) && checkISBNOfBookExist(newISBN)) {
                             throw new Exception("Book's ISBN already exists!");
                         }
@@ -86,6 +86,7 @@ public class ListOfBook {
                     sc = new Scanner(System.in);
                     String newID = sc.nextLine();
                     if (!newID.isEmpty()) {
+                        assert bookWillUpdate != null;
                         if (!newID.equals(bookWillUpdate.getBookID()) && checkIdOfBookExist(newID)) {
                             throw new Exception("Book's ID already exists!");
                         }
@@ -105,6 +106,7 @@ public class ListOfBook {
                     sc = new Scanner(System.in);
                     String newTitle = sc.nextLine();
                     if (!newTitle.isEmpty()) {
+                        assert bookWillUpdate != null;
                         bookWillUpdate.setTitle(newTitle);
                     }
                     stillAdd = false;
@@ -125,6 +127,7 @@ public class ListOfBook {
                             if (newPrice <= 0) {
                                 throw new Exception("Price must be a positive integer!");
                             }
+                            assert bookWillUpdate != null;
                             bookWillUpdate.setPrice(newPrice);
                         } catch (NumberFormatException e) {
                             throw new Exception("Invalid price format!");
@@ -142,11 +145,13 @@ public class ListOfBook {
             if (!authorInput.isEmpty()) {
                 Author newAuthor = new Author();
                 newAuthor.addAuthorInformation();
+                assert bookWillUpdate != null;
                 bookWillUpdate.setAuthor(newAuthor);
             } else {
+                assert bookWillUpdate != null;
                 bookWillUpdate.setAuthor(bookWillUpdate.getAuthor());
             }
-            System.out.println("");
+            //System.out.println();
             System.out.println("Book's information after updated are: ");
             bookWillUpdate.printBookInformation();
             System.out.println("Updated success!");
@@ -171,18 +176,19 @@ public class ListOfBook {
     
     public Book findBookByText(String text) {
         for (Book bookInformation : listBook) {
-            if (bookInformation.getTitle().contains(text))
+            if (bookInformation.getTitle().equalsIgnoreCase(text))
                 return bookInformation;
         } 
         return null;
     }
     
     public void searchAllBookByText(String text) {
-        if (findBookByText(text) == null) System.out.println("No book is matched!");
+        if (findBookByText(text) == null)
+            System.out.println("No book is matched!");
         else {
             System.out.println("Book that have the text are:");
             for (Book bookInformation : listBook) {
-                if (bookInformation.getTitle().contains(text))
+                if (bookInformation.getTitle().equalsIgnoreCase(text))
                     bookInformation.printBookInformation();
             }
         }
@@ -200,7 +206,7 @@ public class ListOfBook {
         try {
             File f = new File(fileNameOfBook); 
             if (!f.exists()){
-                f.createNewFile();
+                return;
             }
             FileInputStream fi = new FileInputStream(f);
             ObjectInputStream fo = new ObjectInputStream(fi);
@@ -225,7 +231,7 @@ public class ListOfBook {
             fo.close(); 
             f.close();
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
         System.out.println("Store data to file success!");
     }
